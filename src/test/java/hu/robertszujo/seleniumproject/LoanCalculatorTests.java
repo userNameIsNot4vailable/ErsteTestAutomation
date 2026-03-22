@@ -9,6 +9,7 @@ import org.assertj.core.api.Assertions;
 import org.testng.ITestContext;
 import org.testng.ITestResult;
 import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
@@ -155,35 +156,24 @@ public class LoanCalculatorTests extends BaseTestClass {
         reporter.pass("Salary error message was displayed correctly");
     }
 
-    @Test(description = "Calculator form should not accept repayment bigger than 50 percent when salary is under 800 000 HUF")
-    public void CalculatorFormShouldNotAcceptRepaymentBiggerThanFiftyPercent_WhenSalaryIsUnderEightHundredThousandHuf() {
-        //Given
-        loadPageAndAcceptCookies();
-
-        //When
-        loanCalculatorPage.typeIntoSalaryInputField("500000");
-
-        //And
-        loanCalculatorPage.typeIntoRepaymentInputField("300000");
-
-        //Then
-        Assertions.assertThat(loanCalculatorPage.isRepaymentErrorMessageDisplayed())
-                .as("Repayment error message should be displayed")
-                .isTrue();
-
-        reporter.pass("Repayment error message was displayed successfully");
+    @DataProvider
+    public Object[][] loanCalculatorDataProvider() {
+        return new Object[][]{
+                {"500000", "300000"},
+                {"900000", "600000"},
+        };
     }
 
-    @Test(description = "Calculator form should not accept repayment bigger than 60 percent when salary is bigger than 800 000 HUF")
-    public void CalculatorFormShouldNotAcceptRepaymentBiggerThanSixtyPercent_WhenSalaryIsBiggerThanEightHundredThousandHuf() {
+    @Test(dataProvider = "loanCalculatorDataProvider", description = "Calculator form should not accept repayment bigger than 50 percent when salary is under 800 000 HUF")
+    public void CalculatorFormShouldNotAcceptRepaymentBiggerThanFiftyPercent_OrSixtyPercentOfSalary(String salary, String repayment) {
         //Given
         loadPageAndAcceptCookies();
 
         //When
-        loanCalculatorPage.typeIntoSalaryInputField("900000");
+        loanCalculatorPage.typeIntoSalaryInputField(salary);
 
         //And
-        loanCalculatorPage.typeIntoRepaymentInputField("600000");
+        loanCalculatorPage.typeIntoRepaymentInputField(repayment);
 
         //Then
         Assertions.assertThat(loanCalculatorPage.isRepaymentErrorMessageDisplayed())
