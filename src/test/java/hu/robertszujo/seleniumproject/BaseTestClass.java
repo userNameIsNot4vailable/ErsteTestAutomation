@@ -4,7 +4,6 @@ import com.aventstack.extentreports.ExtentReports;
 import hu.robertszujo.seleniumproject.constants.TestContextConstants;
 import hu.robertszujo.seleniumproject.reporter.ReporterSetup;
 import hu.robertszujo.seleniumproject.webdriver.ChromeDriverOptions;
-import hu.robertszujo.seleniumproject.webdriver.WebDriverSetup;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.testng.ITestContext;
@@ -20,7 +19,6 @@ public class BaseTestClass {
 
     @BeforeSuite(alwaysRun = true)
     public void baseBeforeSuite() {
-        new WebDriverSetup().setupChromeDriver();
         SuiteWideStorage.testReport = new ExtentReports();
         SuiteWideStorage.testReport.attachReporter(new ReporterSetup().createReporter());
     }
